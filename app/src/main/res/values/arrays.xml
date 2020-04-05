@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="card_images">
+
+        <item>@drawable/z2c</item>
+        <item>@drawable/z2d</item>
+        <item>@drawable/z2h</item>
+        <item>@drawable/z2s</item>
+
+        <item>@drawable/z3c</item>
+        <item>@drawable/z3d</item>
+        <item>@drawable/z3h</item>
+        <item>@drawable/z3s</item>
+
+        <item>@drawable/z4c</item>
+        <item>@drawable/z4d</item>
+        <item>@drawable/z4h</item>
+        <item>@drawable/z4s</item>
+
+        <item>@drawable/z5c</item>
+        <item>@drawable/z5d</item>
+        <item>@drawable/z5h</item>
+        <item>@drawable/z5s</item>
+
+        <item>@drawable/z6c</item>
+        <item>@drawable/z6d</item>
+        <item>@drawable/z6h</item>
+        <item>@drawable/z6s</item>
+
+        <item>@drawable/z7c</item>
+        <item>@drawable/z7d</item>
+        <item>@drawable/z7h</item>
+        <item>@drawable/z7s</item>
+
+
+        <item>@drawable/z8c</item>
+        <item>@drawable/z8d</item>
+        <item>@drawable/z8h</item>
+        <item>@drawable/z8s</item>
+
+        <item>@drawable/z9c</item>
+        <item>@drawable/z9d</item>
+        <item>@drawable/z9h</item>
+        <item>@drawable/z9s</item>
+
+        <item>@drawable/z10c</item>
+        <item>@drawable/z10d</item>
+        <item>@drawable/z10h</item>
+        <item>@drawable/z10s</item>
+
+        <item>@drawable/z11c</item>
+        <item>@drawable/z11d</item>
+        <item>@drawable/z11h</item>
+        <item>@drawable/z11s</item>
+
+        <item>@drawable/z12c</item>
+        <item>@drawable/z12d</item>
+        <item>@drawable/z12h</item>
+        <item>@drawable/z12s</item>
+
+        <item>@drawable/z13c</item>
+        <item>@drawable/z13d</item>
+        <item>@drawable/z13h</item>
+        <item>@drawable/z13s</item>
+
+        <item>@drawable/z14c</item>
+        <item>@drawable/z14d</item>
+        <item>@drawable/z14h</item>
+        <item>@drawable/z14s</item>
+
+
+    </integer-array>
+</resources>
