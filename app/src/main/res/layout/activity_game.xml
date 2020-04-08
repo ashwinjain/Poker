@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#bd0909"
+    android:background="#296e2e"
     android:orientation="vertical"
     tools:context=".GameActivity">
 
@@ -22,13 +22,54 @@
         android:visibility="gone" />
 
 
+    <Button
+        android:id="@+id/button_next_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickDealCard"
+        android:text="@string/deal_card"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/button_declare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/button_next_card"
+        android:onClick="onClickDeclare"
+        android:text="@string/declare_hand"
+        android:visibility="invisible" />
+
+
     <LinearLayout
-        android:id="@+id/linear_cards_table"
+        android:id="@+id/linear_cards_dealer_hand"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image_card_dealer_first"
+            android:layout_width="120dp"
+            android:layout_height="138dp"
+            android:src="@drawable/z14s"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/image_card_dealer_second"
+            android:layout_width="120dp"
+            android:layout_height="138dp"
+            android:src="@drawable/z14s"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/relative_cards_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#296e2e"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/linear_cards_flop"
@@ -39,92 +80,46 @@
 
             <ImageView
                 android:id="@+id/image_card_flop_first"
-                android:layout_width="80dp"
-                android:layout_height="92dp"
-                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="0.2"
+                android:scaleY="0.2"
                 android:src="@drawable/z14s" />
 
             <ImageView
                 android:id="@+id/image_card_flop_second"
-                android:layout_width="80dp"
+                android:layout_width="120dp"
                 android:layout_height="92dp"
-                android:padding="10dp"
                 android:src="@drawable/z14s" />
 
             <ImageView
                 android:id="@+id/image_card_flop_third"
-                android:layout_width="80dp"
+                android:layout_width="120dp"
                 android:layout_height="92dp"
-                android:padding="10dp"
                 android:src="@drawable/z14s" />
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/image_card_turn"
-            android:layout_width="80dp"
-            android:layout_height="92dp"
-            android:padding="10dp"
-            android:src="@drawable/z14s"
-            android:visibility="invisible" />
+        <LinearLayout
+            android:id="@+id/linear_cards_rest"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/image_card_river"
-            android:layout_width="80dp"
-            android:layout_height="92dp"
-            android:padding="10dp"
-            android:src="@drawable/z14s"
-            android:visibility="invisible" />
+            <ImageView
+                android:id="@+id/image_card_turn"
+                android:layout_width="120dp"
+                android:layout_height="92dp"
+                android:src="@drawable/z14s"
+                android:visibility="invisible" />
 
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button_next_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linear_cards_table"
-        android:onClick="onClickDealCard"
-        android:padding="10dp"
-        android:text="@string/deal_card"
-        android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/button_declare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linear_cards_table"
-        android:layout_toRightOf="@id/button_next_card"
-        android:onClick="onClickDeclare"
-        android:padding="10dp"
-        android:text="@string/declare_hand"
-        android:visibility="invisible" />
-
-
-    <LinearLayout
-        android:id="@+id/linear_cards_dealer_hand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:background="#296e2e"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/image_card_dealer_first"
-            android:layout_width="160dp"
-            android:layout_height="184dp"
-            android:padding="10dp"
-            android:src="@drawable/z14s"
-            android:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/image_card_dealer_second"
-            android:layout_width="160dp"
-            android:layout_height="184dp"
-            android:padding="10dp"
-            android:src="@drawable/z14s"
-            android:visibility="visible" />
+            <ImageView
+                android:id="@+id/image_card_river"
+                android:layout_width="120dp"
+                android:layout_height="92dp"
+                android:src="@drawable/z14s"
+                android:visibility="invisible" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -134,33 +129,51 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="#296e2e"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/image_card_first"
-            android:layout_width="160dp"
-            android:layout_height="184dp"
-            android:padding="10dp"
+            android:layout_width="120dp"
+            android:layout_height="138dp"
             android:src="@drawable/z14s"
             android:visibility="visible" />
 
         <ImageView
             android:id="@+id/image_card_second"
-            android:layout_width="160dp"
-            android:layout_height="184dp"
-            android:padding="10dp"
+            android:layout_width="120dp"
+            android:layout_height="138dp"
             android:src="@drawable/z14s"
             android:visibility="visible" />
 
+
     </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/text_dealer_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textSize="45sp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/text_player_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="45sp"
+        android:visibility="visible" />
+
 
     <LinearLayout
         android:id="@+id/linear_bet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/linear_cards_table"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -185,6 +198,7 @@
             android:id="@+id/button_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onClickCheck"
             android:padding="10dp"
             android:text="@string/check" />
 

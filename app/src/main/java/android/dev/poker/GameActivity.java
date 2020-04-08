@@ -1,6 +1,7 @@
 package android.dev.poker;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -109,9 +111,11 @@ public class GameActivity extends AppCompatActivity {
     private final HandController CONTROLLER = new HandController();
     private HashMap<Integer, Card> CARD_IMAGE_MAP;
     private ArrayList<Integer> cardIndices;
-    private double mPlayerBalance;
-    private double mPot = 0;
-    private double mDealerBalance;
+    private float mPlayerBalance;
+    private float mPot = 0;
+    private float mDealerBalance;
+    private TextView playerBalance;
+    private TextView dealerBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,15 +148,30 @@ public class GameActivity extends AppCompatActivity {
         });
 
 
+        playerBalance = findViewById(R.id.text_player_balance);
+        dealerBalance = findViewById(R.id.text_dealer_balance);
         CARD_IMAGE_MAP = generateCardImageMap();
 
-        mPlayerBalance = 100;
-        mDealerBalance = 100;
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+        mPlayerBalance = prefs.getFloat(getString(R.string.player_balance), 100);
+
+
+        mDealerBalance = prefs.getFloat(getString(R.string.dealer_balance), 100);
+
+
+        updateBalance();
+
         startRound();
 
-        // Upon interacting with UI controls, delay any scheduled hide()
+        // Upon interacting with UI controls, delay any scheduled hide()s
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
+    }
+
+    private void updateBalance() {
+        playerBalance.setText(String.valueOf(mPlayerBalance));
+        dealerBalance.setText(String.valueOf(mDealerBalance));
     }
 
     private void startRound() {
@@ -162,9 +181,14 @@ public class GameActivity extends AppCompatActivity {
         mPlayerBalance -= 10;
         mDealerBalance -= 10;
 
+        mPot += 20;
+
         dealPlayerHand();
         dealDealerHand();
+
+        updateBalance();
     }
+
 
     private void dealDealerHand() {
 
@@ -391,6 +415,8 @@ public class GameActivity extends AppCompatActivity {
                             + RANKS[(int) (playerRank / 1000)] + "\nThe dealer has a "
 
                             + RANKS[(int) (dealerRank / 1000)];
+                    mPlayerBalance += mPot;
+
                     break;
                 case -1:
                     toastString = "You lost :( \nYou have a "
@@ -398,20 +424,37 @@ public class GameActivity extends AppCompatActivity {
                             + RANKS[(int) (playerRank / 1000)] + "\nThe dealer has a "
 
                             + RANKS[(int) (dealerRank / 1000)];
+                    mDealerBalance += mPot;
                     break;
                 case 0:
                     toastString = "You tied :| Crazy\nYou both have a "
 
                             + RANKS[(int) (playerRank / 1000)];
+                    mPlayerBalance += (mPot / 2);
                     break;
                 default:
                     toastString = "sus";
 
             }
 
-
+            Log.i("BET INFORMATION", "The pot had " + mPot);
+            Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
+            Log.i("BET INFORMATION", "The dealer's balance is " + mDealerBalance);
+            mPot = 0;
             Toast.makeText(getApplicationContext(), toastString, Toast.LENGTH_LONG).show();
+
+            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putFloat(getString(R.string.player_balance), mPlayerBalance);
+            editor.putFloat(getString(R.string.dealer_balance), mDealerBalance);
+            editor.apply();
+
+
+            updateBalance();
+
+
         } else {
+
             Toast.makeText(getApplicationContext(), "You must deal all of your cards first!", Toast.LENGTH_SHORT).show();
         }
 
@@ -447,15 +490,16 @@ public class GameActivity extends AppCompatActivity {
 
         String betString = String.valueOf(editText.getText());
 
-        LinearLayout table = findViewById(R.id.linear_cards_table);
+//        LinearLayout table = findViewById(R.id.linear_cards_table);
 
         if (betString.isEmpty()) {
             Toast.makeText(this, "You must bet something, or check", Toast.LENGTH_SHORT).show();
         } else {
-            double bet = Double.parseDouble(betString);
+            float bet = Float.parseFloat(betString);
 
             mPlayerBalance -= bet;
             mDealerBalance -= bet;
+
             mPot += (bet * 2);
 
             Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
@@ -467,6 +511,10 @@ public class GameActivity extends AppCompatActivity {
                 findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
             }
         }
+        updateBalance();
+    }
+
+    public void onClickCheck(View view) {
     }
 }
 

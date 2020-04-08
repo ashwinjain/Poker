@@ -28,4 +28,6 @@
     <string name="bet_amount">Enter your bet amount...</string>
     <string name="check">Check</string>
     <string name="fold">Fold</string>
+    <string name="player_balance">PLAYER_BALANCE</string>
+    <string name="dealer_balance">DEALER_BALANCE</string>
 </resources>
