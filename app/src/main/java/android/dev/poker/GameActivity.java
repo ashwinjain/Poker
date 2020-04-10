@@ -1,6 +1,7 @@
 package android.dev.poker;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -116,6 +118,9 @@ public class GameActivity extends AppCompatActivity {
     private float mDealerBalance;
     private TextView playerBalance;
     private TextView dealerBalance;
+    private int raise;
+
+    private DecimalFormat formatter = new DecimalFormat("'$'0.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,21 +153,35 @@ public class GameActivity extends AppCompatActivity {
         });
 
 
+        String username = getIntent().getStringExtra(Intent.EXTRA_USER);
+
+        TextView playerNameView = findViewById(R.id.text_player_name);
+        playerNameView.setText(username);
         playerBalance = findViewById(R.id.text_player_balance);
         dealerBalance = findViewById(R.id.text_dealer_balance);
         CARD_IMAGE_MAP = generateCardImageMap();
 
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
+
         mPlayerBalance = prefs.getFloat(getString(R.string.player_balance), 100);
 
 
         mDealerBalance = prefs.getFloat(getString(R.string.dealer_balance), 100);
 
+//        mPlayerBalance = 110;
+//        mDealerBalance = 110;
+//        updatePreferences();
 
-        updateBalance();
 
-        startRound();
+        if (mPlayerBalance < 10) {
+            Toast.makeText(this, "You LOST :(. You do not have enough money to continue playing!", Toast.LENGTH_LONG).show();
+        } else if (mDealerBalance < 10) {
+            Toast.makeText(this, "You WON :))!! I do not have enough money to continue playing.", Toast.LENGTH_LONG).show();
+
+        } else {
+            startRound();
+        }
 
         // Upon interacting with UI controls, delay any scheduled hide()s
         // operations to prevent the jarring behavior of controls going away
@@ -170,21 +189,23 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void updateBalance() {
-        playerBalance.setText(String.valueOf(mPlayerBalance));
-        dealerBalance.setText(String.valueOf(mDealerBalance));
+        playerBalance.setText(formatter.format(mPlayerBalance));
+        dealerBalance.setText(formatter.format(mDealerBalance));
     }
 
     private void startRound() {
         cardIndices = new ArrayList<>();
         cardIndices.clear();
 
+
         mPlayerBalance -= 10;
+
         mDealerBalance -= 10;
 
         mPot += 20;
 
         dealPlayerHand();
-        dealDealerHand();
+
 
         updateBalance();
     }
@@ -342,7 +363,17 @@ public class GameActivity extends AppCompatActivity {
 
         betButtons.setVisibility(View.VISIBLE);
         view.setVisibility(View.GONE);
+        revertLinearLayoutBet();
 
+
+    }
+
+    private void revertLinearLayoutBet() {
+
+        findViewById(R.id.button_bet).setVisibility(View.VISIBLE);
+        findViewById(R.id.button_check).setVisibility(View.VISIBLE);
+        findViewById(R.id.edit_bet).setVisibility(View.VISIBLE);
+        findViewById(R.id.button_match).setVisibility(View.GONE);
 
     }
 
@@ -389,12 +420,18 @@ public class GameActivity extends AppCompatActivity {
 
     public void onClickDeclare(View view) {
 
+        findViewById(R.id.button_next_hand).setVisibility(View.VISIBLE);
+        view.setVisibility(View.INVISIBLE);
 
-        if (mPlayerHand.size() == 7 && mDealerHand.size() == 7) {
+
+        if (mPlayerHand.size() == 7 && mDealerHand.size() == 5) {
+
+            dealDealerHand();
 
             final String[] RANKS = {"High Card", "One Pair", "Two Pair", "Three of A Kind", "Straight", "Flush",
 
                     "Full House", "4 of a Kind", "Straight Flush", "Royal Flush"};
+
 
             Hand playerHand = new Hand(mPlayerHand);
             Hand dealerHand = new Hand(mDealerHand);
@@ -437,17 +474,16 @@ public class GameActivity extends AppCompatActivity {
 
             }
 
+            findViewById(R.id.image_card_dealer_first).setVisibility(View.VISIBLE);
+            findViewById(R.id.image_card_dealer_second).setVisibility(View.VISIBLE);
+
             Log.i("BET INFORMATION", "The pot had " + mPot);
             Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
             Log.i("BET INFORMATION", "The dealer's balance is " + mDealerBalance);
             mPot = 0;
             Toast.makeText(getApplicationContext(), toastString, Toast.LENGTH_LONG).show();
 
-            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putFloat(getString(R.string.player_balance), mPlayerBalance);
-            editor.putFloat(getString(R.string.dealer_balance), mDealerBalance);
-            editor.apply();
+            updatePreferences();
 
 
             updateBalance();
@@ -458,6 +494,16 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "You must deal all of your cards first!", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void updatePreferences() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+
+        editor.putFloat(getString(R.string.player_balance), mPlayerBalance);
+        editor.putFloat(getString(R.string.dealer_balance), mDealerBalance);
+        editor.apply();
     }
 
     private boolean isInvisible(View view) {
@@ -484,39 +530,177 @@ public class GameActivity extends AppCompatActivity {
 
     public void onClickBet(View view) {
 
+
         EditText editText = findViewById(R.id.edit_bet);
+        String betString = String.valueOf(editText.getText());
+
+        if (Float.parseFloat(betString) < 1) {
+            Toast.makeText(getApplicationContext(), "The bet must be at least 1 dollar - cents are allowed", Toast.LENGTH_SHORT).show();
+        } else if (betString.isEmpty()) {
+            Toast.makeText(this, "You must bet something, or check", Toast.LENGTH_SHORT).show();
+        } else {
+            Button button = findViewById(R.id.button_next_card);
+
+
+            float bet = Float.parseFloat(betString);
+            if (checkBalance(bet)) {
+
+                if (bet > mDealerBalance) {
+                    Toast.makeText(this, "I am going all in.", Toast.LENGTH_SHORT).show();
+
+                    mPot += (bet + mDealerBalance);
+
+                    mDealerBalance = 0;
+
+                    Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
+
+                    ((LinearLayout) view.getParent()).setVisibility(View.INVISIBLE);
+                    if (findViewById(R.id.image_card_river).getVisibility() == View.INVISIBLE) {
+                        button.setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
+                    }
+                    updateBalance();
+
+                    Toast.makeText(this, "I match you " + formatter.format(bet), Toast.LENGTH_SHORT).show();
+
+                    findViewById(R.id.linear_bet).setVisibility(View.GONE);
+
+                    view.setVisibility(View.VISIBLE);
+                    onClickDealCard(findViewById(R.id.button_next_card));
+                    onClickDealCard(findViewById(R.id.button_next_card));
+                    onClickDealCard(findViewById(R.id.button_next_card));
+
+                    findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
+                    findViewById(R.id.linear_bet).setVisibility(View.GONE);
+
+                } else {
+                    mPlayerBalance -= bet;
+                    mDealerBalance -= bet;
+
+                    mPot += (bet * 2);
+
+                    Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
+
+                    ((LinearLayout) view.getParent()).setVisibility(View.INVISIBLE);
+                    if (findViewById(R.id.image_card_river).getVisibility() == View.INVISIBLE) {
+                        button.setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
+                    }
+                    updateBalance();
+
+                    Toast.makeText(this, "I match you " + formatter.format(bet), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "You do not have enough money. All in?", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+    }
+
+    private boolean checkBalance(float inBet) {
+        return (inBet < mPlayerBalance);
+
+
+    }
+
+    public void onClickCheck(View view) {
+
+        raise = (int) (Math.random() * 11);
+        Toast.makeText(getApplicationContext(), "ha I raise you " + formatter.format(raise), Toast.LENGTH_LONG).show();
+        Button match = findViewById(R.id.button_match);
+        match.setText("Match $" + raise);
+        changeLinearLayoutBet();
+
+
+    }
+
+    private void changeLinearLayoutBet() {
+        findViewById(R.id.button_bet).setVisibility(View.GONE);
+        findViewById(R.id.button_check).setVisibility(View.GONE);
+        findViewById(R.id.edit_bet).setVisibility(View.GONE);
+        findViewById(R.id.button_match).setVisibility(View.VISIBLE);
+
+    }
+
+    public void onClickNextHand(View view) {
+
+        super.recreate();
+
+
+    }
+
+    public void onClickFold(View view) {
+        mDealerBalance += mPot;
+        mPot = 0;
+        updateBalance();
+        updatePreferences();
+        super.recreate();
+    }
+
+    public void onClickMatch(View view) {
+
 
         Button button = findViewById(R.id.button_next_card);
 
-        String betString = String.valueOf(editText.getText());
 
-//        LinearLayout table = findViewById(R.id.linear_cards_table);
+        mPlayerBalance -= raise;
+        mDealerBalance -= raise;
 
-        if (betString.isEmpty()) {
-            Toast.makeText(this, "You must bet something, or check", Toast.LENGTH_SHORT).show();
+        mPot += (raise * 2);
+
+        Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
+
+        ((LinearLayout) view.getParent()).setVisibility(View.INVISIBLE);
+        if (findViewById(R.id.image_card_river).getVisibility() == View.INVISIBLE) {
+            button.setVisibility(View.VISIBLE);
         } else {
-            float bet = Float.parseFloat(betString);
-
-            mPlayerBalance -= bet;
-            mDealerBalance -= bet;
-
-            mPot += (bet * 2);
-
-            Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
-
-            ((LinearLayout) view.getParent()).setVisibility(View.INVISIBLE);
-            if (findViewById(R.id.image_card_river).getVisibility() == View.INVISIBLE) {
-                button.setVisibility(View.VISIBLE);
-            } else {
-                findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
-            }
+            findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
         }
         updateBalance();
     }
 
-    public void onClickCheck(View view) {
+    public void onClickAllIn(View view) {
+
+        float bet = mPlayerBalance;
+        mDealerBalance -= bet;
+
+        mPot += (bet * 2);
+
+        mPlayerBalance = 0;
+
+        Log.i("BET INFORMATION", "Your balance is " + mPlayerBalance);
+
+        Button button = findViewById(R.id.button_next_card);
+
+        ((LinearLayout) view.getParent()).setVisibility(View.INVISIBLE);
+        if (findViewById(R.id.image_card_river).getVisibility() == View.INVISIBLE) {
+            button.setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
+        }
+        updateBalance();
+
+        Toast.makeText(this, "I match you " + formatter.format(bet), Toast.LENGTH_SHORT).show();
+
+        findViewById(R.id.linear_bet).setVisibility(View.GONE);
+
+        view.setVisibility(View.VISIBLE);
+        onClickDealCard(findViewById(R.id.button_next_card));
+        onClickDealCard(findViewById(R.id.button_next_card));
+        onClickDealCard(findViewById(R.id.button_next_card));
+
+        findViewById(R.id.button_declare).setVisibility(View.VISIBLE);
+        findViewById(R.id.linear_bet).setVisibility(View.GONE);
+
     }
 }
+
+
+
+
 
 
 

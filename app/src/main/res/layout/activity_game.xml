@@ -26,6 +26,8 @@
         android:id="@+id/button_next_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/linear_bet"
+        android:layout_alignParentRight="true"
         android:onClick="onClickDealCard"
         android:text="@string/deal_card"
         android:visibility="invisible" />
@@ -34,9 +36,20 @@
         android:id="@+id/button_declare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/button_next_card"
+        android:layout_above="@id/linear_bet"
+        android:layout_alignParentRight="true"
         android:onClick="onClickDeclare"
         android:text="@string/declare_hand"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/button_next_hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linear_bet"
+        android:layout_alignParentRight="true"
+        android:onClick="onClickNextHand"
+        android:text="@string/next_hand"
         android:visibility="invisible" />
 
 
@@ -49,16 +62,16 @@
 
         <ImageView
             android:id="@+id/image_card_dealer_first"
-            android:layout_width="120dp"
-            android:layout_height="138dp"
-            android:src="@drawable/z14s"
+            android:layout_width="150dp"
+            android:layout_height="172.5dp"
+            android:src="@drawable/gray_back"
             android:visibility="visible" />
 
         <ImageView
             android:id="@+id/image_card_dealer_second"
-            android:layout_width="120dp"
-            android:layout_height="138dp"
-            android:src="@drawable/z14s"
+            android:layout_width="150dp"
+            android:layout_height="172.5dp"
+            android:src="@drawable/gray_back"
             android:visibility="visible" />
 
 
@@ -69,6 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:background="#940000"
         android:orientation="vertical">
 
         <LinearLayout
@@ -80,22 +94,20 @@
 
             <ImageView
                 android:id="@+id/image_card_flop_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleX="0.2"
-                android:scaleY="0.2"
+                android:layout_width="120dp"
+                android:layout_height="138dp"
                 android:src="@drawable/z14s" />
 
             <ImageView
                 android:id="@+id/image_card_flop_second"
                 android:layout_width="120dp"
-                android:layout_height="92dp"
+                android:layout_height="138dp"
                 android:src="@drawable/z14s" />
 
             <ImageView
                 android:id="@+id/image_card_flop_third"
                 android:layout_width="120dp"
-                android:layout_height="92dp"
+                android:layout_height="138dp"
                 android:src="@drawable/z14s" />
 
         </LinearLayout>
@@ -109,14 +121,14 @@
             <ImageView
                 android:id="@+id/image_card_turn"
                 android:layout_width="120dp"
-                android:layout_height="92dp"
+                android:layout_height="138dp"
                 android:src="@drawable/z14s"
                 android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/image_card_river"
                 android:layout_width="120dp"
-                android:layout_height="92dp"
+                android:layout_height="138dp"
                 android:src="@drawable/z14s"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -128,26 +140,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/image_card_first"
-            android:layout_width="120dp"
-            android:layout_height="138dp"
+            android:layout_width="150dp"
+            android:layout_height="172.5dp"
             android:src="@drawable/z14s"
             android:visibility="visible" />
 
         <ImageView
             android:id="@+id/image_card_second"
-            android:layout_width="120dp"
-            android:layout_height="138dp"
+            android:layout_width="150dp"
+            android:layout_height="172.5dp"
             android:src="@drawable/z14s"
             android:visibility="visible" />
 
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/text_dealer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/text_dealer_balance"
+        android:text="Talia"
+        android:textColor="#940000"
+        android:textSize="20sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/text_dealer_balance"
@@ -155,8 +177,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:textSize="45sp"
+        android:textColor="#940000"
+        android:textSize="35sp"
+        android:textStyle="bold"
         android:visibility="visible" />
+
 
     <TextView
         android:id="@+id/text_player_balance"
@@ -165,18 +190,41 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        android:textSize="45sp"
+        android:textColor="#940000"
+        android:textSize="35sp"
+        android:textStyle="bold"
         android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/text_player_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/text_player_balance"
+        android:layout_alignParentRight="true"
+        android:textColor="#940000"
+        android:textSize="20sp"
+        android:visibility="visible" />
+
 
 
     <LinearLayout
         android:id="@+id/linear_bet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/text_player_name"
         android:layout_alignParentRight="true"
+        android:background="#ffffff"
         android:orientation="vertical"
         android:visibility="visible">
 
+
+        <EditText
+            android:id="@+id/edit_bet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="$ Bet?"
+            android:inputType="numberDecimal"
+            android:textColor="#940000" />
 
         <Button
             android:id="@+id/button_bet"
@@ -184,14 +232,8 @@
             android:layout_height="wrap_content"
             android:onClick="onClickBet"
             android:padding="10dp"
-            android:text="@string/bet" />
-
-        <EditText
-            android:id="@+id/edit_bet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Bet?"
-            android:inputType="numberDecimal" />
+            android:text="@string/bet"
+            android:textColor="#240303" />
 
 
         <Button
@@ -200,14 +242,36 @@
             android:layout_height="wrap_content"
             android:onClick="onClickCheck"
             android:padding="10dp"
-            android:text="@string/check" />
+            android:text="@string/check"
+            android:textColor="#240303" />
+        <Button
+            android:id="@+id/button_all_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/linear_bet"
+            android:layout_alignParentRight="true"
+            android:text="All in"
+            android:onClick="onClickAllIn"
+            android:visibility="visible" />
+        <Button
+            android:id="@+id/button_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickMatch"
+            android:padding="10dp"
+            android:text="Match Raise?"
+            android:textColor="#240303"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/button_fold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onClickFold"
             android:padding="10dp"
-            android:text="@string/fold" />
+            android:text="@string/fold"
+            android:textColor="#240303" />
+
 
     </LinearLayout>
 

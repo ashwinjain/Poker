@@ -24,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,21 +160,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-                    //            showProgress(true);
-                    //            mAuthTask = new UserLoginTask(email, password);
-                    //            mAuthTask.execute((Void) null);
+            //            showProgress(true);
+            //            mAuthTask = new UserLoginTask(email, password);
+            //            mAuthTask.execute((Void) null);
 
-            if (!username.equalsIgnoreCase("ASHWIN")){
 
-                Toast.makeText(getApplicationContext(), "The username is: ashwin", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            showProgress(true);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra(Intent.EXTRA_USER, username);
+            startActivity(intent);
 
-                showProgress(true);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("EXTRA_USERNAME", username);
-                startActivity(intent);
-            }
 
         }
     }
@@ -265,8 +259,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
-
-
 
 
     private interface ProfileQuery {

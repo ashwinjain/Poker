@@ -6,7 +6,7 @@
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This username needs to be at least 4 letters long</string>
     <string name="error_invalid_password">This password needs to contain at least one number</string>
@@ -30,4 +30,5 @@
     <string name="fold">Fold</string>
     <string name="player_balance">PLAYER_BALANCE</string>
     <string name="dealer_balance">DEALER_BALANCE</string>
+    <string name="next_hand">Next Hand</string>
 </resources>

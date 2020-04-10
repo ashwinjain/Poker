@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(getApplicationContext(), "Welcome " + getIntent().getStringExtra("EXTRA_USERNAME") + "!", Toast.LENGTH_SHORT).show();
+
+        username = getIntent().getStringExtra(Intent.EXTRA_USER);
+
+
+        Toast.makeText(this, "Welcome " + username + "!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -61,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickPlay(View view) {
         // TODO: implement the play button
-        startActivity(new Intent(getApplicationContext(), GameActivity.class));
+
+        Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+        intent.putExtra(Intent.EXTRA_USER, username);
+        startActivity(intent);
     }
 }
