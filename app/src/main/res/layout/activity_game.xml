@@ -30,7 +30,7 @@
         android:layout_alignParentRight="true"
         android:onClick="onClickDealCard"
         android:text="@string/deal_card"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/button_declare"
@@ -40,7 +40,7 @@
         android:layout_alignParentRight="true"
         android:onClick="onClickDeclare"
         android:text="@string/declare_hand"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/button_next_hand"
@@ -50,7 +50,7 @@
         android:layout_alignParentRight="true"
         android:onClick="onClickNextHand"
         android:text="@string/next_hand"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
 
     <LinearLayout
@@ -169,6 +169,7 @@
         android:text="Talia"
         android:textColor="#940000"
         android:textSize="20sp"
+        android:textStyle="bold"
         android:visibility="visible" />
 
     <TextView
@@ -203,8 +204,8 @@
         android:layout_alignParentRight="true"
         android:textColor="#940000"
         android:textSize="20sp"
+        android:textStyle="bold"
         android:visibility="visible" />
-
 
 
     <LinearLayout
@@ -244,24 +245,17 @@
             android:padding="10dp"
             android:text="@string/check"
             android:textColor="#240303" />
+
         <Button
             android:id="@+id/button_all_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/linear_bet"
             android:layout_alignParentRight="true"
-            android:text="All in"
             android:onClick="onClickAllIn"
+            android:text="All in"
             android:visibility="visible" />
-        <Button
-            android:id="@+id/button_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickMatch"
-            android:padding="10dp"
-            android:text="Match Raise?"
-            android:textColor="#240303"
-            android:visibility="gone" />
+
 
         <Button
             android:id="@+id/button_fold"
@@ -274,6 +268,17 @@
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/linear_bet"
+        android:onClick="onClickMatch"
+        android:padding="10dp"
+        android:text="Match Raise?"
+        android:textColor="#240303"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
