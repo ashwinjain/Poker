@@ -396,7 +396,7 @@ public class GameActivity extends AppCompatActivity {
 
             switch (result) {
                 case 1:
-                    toastString = "You won!! \nYou have a "
+                    toastString = "You won!! \nYOU have a "
 
                             + RANKS[(int) (playerRank / 1000)] + "\nThe dealer has a "
 
